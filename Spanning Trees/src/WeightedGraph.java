@@ -1,7 +1,5 @@
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Stack;
 
 public class WeightedGraph {
@@ -55,43 +53,41 @@ public class WeightedGraph {
 		ArrayList<Integer> allAdjacent = null;
 		int u = 0;
 		int[] vector = new int[maxVertices];
+		WeightedGraph solution = new WeightedGraph(maxVertices);
 		Stack<Integer> mstSet = new Stack<Integer>();
 		mstSet.add(u);
-		// init vertor with max size 
+		// init vertor with max size
 		for (int i = 1; i < maxVertices; i++)
 			vector[i] = Integer.MAX_VALUE;
 
-		while (mstSet.size() != maxVertices) {
-			do {
-				
-				allAdjacent = getAdjacent(u);
-				allAdjacent.removeAll(mstSet);
-				
-				
-					
+		while (mstSet.size() < maxVertices) {
 
-			} while (allAdjacent.isEmpty());
-			System.out.println("u= "+u+"  Canditate ajacents "+allAdjacent);
+			allAdjacent = getAdjacent(u);
+			allAdjacent.removeAll(mstSet);
+
+			System.out.println("u= " + u + "  Canditate ajacents " + allAdjacent);
 			for (Integer v : allAdjacent) {
-				System.out.println("U :" +u+" V: "+v);
+				System.out.println("U :" + u + " V: " + v);
 				int weight = adjacent(u, v);
 				if (weight < vector[v])
 					vector[v] = weight;
+				// we need to reset all the connection
+				solution.insert(u, v, 0);
+				solution.insert(u, v, weight);
 
 			}
 
 			u = getCadidate(mstSet, vector);
+
 			mstSet.add(u);
-			
-			
 
 			System.out.println("Vector : " + Arrays.toString(vector));
 			System.out.println("mstSet :" + mstSet);
-			System.out.println("u : "+u);
+			System.out.println("u : " + u);
 			System.out.println(" ");
 
 		}
-		return null;
+		return solution;
 
 	}
 
@@ -127,10 +123,23 @@ public class WeightedGraph {
 	// If the vertices do not exist or are equal, throw an exception.
 	public void insert(int m, int n, int w) {
 
-		matrix[m][n] = w;
-		if (n > maxVertices || m > maxVertices || n == m || n < 0 || m < 0) {
+		// 1. if w==0 we must remove all edges
+		if (w == 0)
+			removeAllEdge(m, m);
+		else if (matrix[m][n] > 0) {
+			matrix[m][n] = w;
+			matrix[n][m] = w;
+		} else if (n > maxVertices || m > maxVertices || n == m || n < 0 || m < 0) {
 			throw new RuntimeException("the vertices do not exist or are equal");
 		}
+
+	}
+
+	private void removeAllEdge(int m, int m2) {
+
+		for (int i = 0; i < matrix.length; i++)
+			for (int j = 0; j < matrix.length; j++)
+				matrix[i][j] = 0;
 
 	}
 
@@ -140,4 +149,13 @@ public class WeightedGraph {
 		return "my prims";
 	}
 
+	@Override
+	public String toString() {
+
+		String str = "";
+		for (int[] is : matrix) {
+			str += Arrays.toString(is) + System.lineSeparator();
+		}
+		return str;
+	}
 }

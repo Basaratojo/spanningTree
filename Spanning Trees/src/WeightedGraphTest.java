@@ -1,5 +1,7 @@
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Arrays;
+
 import org.junit.jupiter.api.Test;
 
 class WeightedGraphTest {
@@ -37,6 +39,9 @@ class WeightedGraphTest {
 			assertEquals(14, edgeCount);
 		
 			WeightedGraph minimumSpanningTree = graph.minimumSpanningTree();
+			
+			
+			System.out.println(minimumSpanningTree);
 			
 			
 	}
