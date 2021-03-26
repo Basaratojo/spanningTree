@@ -100,7 +100,8 @@ public class WeightedGraph {
 		WeightedGraph solution = new WeightedGraph(maxVertices);
 
 		for (int i = 0; i < parent.length; i++) {
-			solution.insert(i, parent[i], matrix[i][parent[i]]);
+			if (i != parent[i])
+				solution.insert(i, parent[i], matrix[i][parent[i]]);
 		}
 		return solution;
 	}
@@ -138,22 +139,10 @@ public class WeightedGraph {
 	public void insert(int m, int n, int w) {
 
 		// 1. if w==0 we must remove all edges
-		if (w == 0)
-			removeAllEdge(m, m);
-		else if (n > maxVertices || m > maxVertices || n == m || n < 0 || m < 0) {
+		if (n > maxVertices || m > maxVertices || n == m || n < 0 || m < 0)
 			throw new RuntimeException("the vertices do not exist or are equal");
-		} else {
-			matrix[m][n] = w;
-			matrix[n][m] = w;
-		}
-
-	}
-
-	private void removeAllEdge(int m, int m2) {
-
-		for (int i = 0; i < matrix.length; i++)
-			for (int j = 0; j < matrix.length; j++)
-				matrix[i][j] = 0;
+		matrix[m][n] = w;
+		matrix[n][m] = w;
 
 	}
 
