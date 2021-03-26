@@ -14,6 +14,11 @@ public class WeightedGraph {
 
 	}
 
+	public WeightedGraph(int[][] m) {
+		matrix = m;
+		maxVertices = m.length;
+	}
+
 	// Returns the degree of vertex with id/index n
 	public int degree(int n) {
 		int degree = 0;
@@ -53,7 +58,8 @@ public class WeightedGraph {
 		ArrayList<Integer> allAdjacent = null;
 		int u = 0;
 		int[] vector = new int[maxVertices];
-		WeightedGraph solution = new WeightedGraph(maxVertices);
+		int[] parent = new int[maxVertices];
+
 		Stack<Integer> mstSet = new Stack<Integer>();
 		mstSet.add(u);
 		// init vertor with max size
@@ -69,26 +75,34 @@ public class WeightedGraph {
 			for (Integer v : allAdjacent) {
 				System.out.println("U :" + u + " V: " + v);
 				int weight = adjacent(u, v);
-				if (weight < vector[v])
+				if (weight < vector[v]) {
 					vector[v] = weight;
+					parent[v] = u;
+				}
 				// we need to reset all the connection
-				solution.insert(u, v, 0);
-				solution.insert(u, v, weight);
 
 			}
 
 			u = getCadidate(mstSet, vector);
-
 			mstSet.add(u);
-
 			System.out.println("Vector : " + Arrays.toString(vector));
 			System.out.println("mstSet :" + mstSet);
-			System.out.println("u : " + u);
+			System.out.println("next u : " + u);
 			System.out.println(" ");
 
 		}
-		return solution;
+		return buildSolution(parent, vector);
 
+	}
+
+	private WeightedGraph buildSolution(int[] parent, int[] vector) {
+
+		WeightedGraph solution = new WeightedGraph(maxVertices);
+
+		for (int i = 0; i < parent.length; i++) {
+			solution.insert(i, parent[i], matrix[i][parent[i]]);
+		}
+		return solution;
 	}
 
 	private int getCadidate(Stack<Integer> mstSet, int[] vector) {
@@ -126,11 +140,11 @@ public class WeightedGraph {
 		// 1. if w==0 we must remove all edges
 		if (w == 0)
 			removeAllEdge(m, m);
-		else if (matrix[m][n] > 0) {
+		else if (n > maxVertices || m > maxVertices || n == m || n < 0 || m < 0) {
+			throw new RuntimeException("the vertices do not exist or are equal");
+		} else {
 			matrix[m][n] = w;
 			matrix[n][m] = w;
-		} else if (n > maxVertices || m > maxVertices || n == m || n < 0 || m < 0) {
-			throw new RuntimeException("the vertices do not exist or are equal");
 		}
 
 	}

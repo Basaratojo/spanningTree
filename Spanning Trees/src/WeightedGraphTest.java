@@ -28,47 +28,17 @@ class WeightedGraphTest {
 	@Test
 	void testSolveExampleYouTube() {
 		// https://www.youtube.com/watch?v=eB61LXLZVqs&t=365s
-		WeightedGraph graph = new WeightedGraph(9);
-		for (int i = 0; i < matrix.length; i++) 
-			for (int j = 0; j < matrix.length; j++) {
-				if (i != j)
-					graph.insert(i, j, matrix[i][j]);
-			}
-			// this shoud be 14
-			int edgeCount = graph.edgeCount();
-			assertEquals(14, edgeCount);
-		
-			WeightedGraph minimumSpanningTree = graph.minimumSpanningTree();
-			
-			
-			System.out.println(minimumSpanningTree);
-			
-			
+		WeightedGraph graph = new WeightedGraph(matrix);
+
+		// this shoud be 14
+		int edgeCount = graph.edgeCount();
+		assertEquals(14, edgeCount);
+
+		WeightedGraph minimumSpanningTree = graph.minimumSpanningTree();
+
+		System.out.println(minimumSpanningTree);
+
 	}
-	//
-	// @Test
-	// void testEdgeCount() {
-	// fail("Not yet implemented");
-	// }
-	//
-	// @Test
-	// void testAdjacent() {
-	// fail("Not yet implemented");
-	// }
-	//
-	// @Test
-	// void testMinimumSpanningTree() {
-	// fail("Not yet implemented");
-	// }
-	//
-	// @Test
-	// void testInsert() {
-	// fail("Not yet implemented");
-	// }
-	//
-	// @Test
-	// void testGetName() {
-	// fail("Not yet implemented");
-	// }
+	 
 
 }
