@@ -37,8 +37,8 @@ public class WeightedGraph {
 
 	}
 
-	// Returns the weight of the edge connecting vertices m and n. 
-	// If the vertices are equal, return 0. 
+	// Returns the weight of the edge connecting vertices m and n.
+	// If the vertices are equal, return 0.
 	// If the vertices are not adjacent, return -1
 	public int adjacent(int m, int n) {
 		if (n == m)
@@ -49,51 +49,56 @@ public class WeightedGraph {
 
 	}
 
-	// Return the minimum spanning tree of this WeightedGraph in the form of a new WeightedGraph
+	// Return the minimum spanning tree of this WeightedGraph in the form of a new
+	// WeightedGraph
 	public WeightedGraph minimumSpanningTree() {
 		ArrayList<Integer> allAdjacent = null;
 		int u = 0;
 		int[] vector = new int[maxVertices];
-		int miniWeight = -1;
-		int miniU = -1;
 		Stack<Integer> mstSet = new Stack<Integer>();
 		mstSet.add(u);
+		// init vertor with max size 
+		for (int i = 1; i < maxVertices; i++)
+			vector[i] = Integer.MAX_VALUE;
 
-		while (mstSet.size() == maxVertices) {
-			for (int i = 1; i < maxVertices; i++)
-
-				vector[i] = Integer.MAX_VALUE;
+		while (mstSet.size() != maxVertices) {
 			do {
-				u = getCadidate(mstSet, vector);
+				
 				allAdjacent = getAdjacent(u);
 				allAdjacent.removeAll(mstSet);
+				
+				
+					
 
 			} while (allAdjacent.isEmpty());
+			System.out.println("u= "+u+"  Canditate ajacents "+allAdjacent);
 			for (Integer v : allAdjacent) {
-
+				System.out.println("U :" +u+" V: "+v);
 				int weight = adjacent(u, v);
-
-				if (miniWeight == -1 || miniWeight > weight) {
-
-					miniWeight = weight;
-					miniU = v;
-				}
-
 				if (weight < vector[v])
 					vector[v] = weight;
 
 			}
-			mstSet.add(miniU);
-			u = miniU;
+
+			u = getCadidate(mstSet, vector);
+			mstSet.add(u);
+			
+			
+
+			System.out.println("Vector : " + Arrays.toString(vector));
+			System.out.println("mstSet :" + mstSet);
+			System.out.println("u : "+u);
+			System.out.println(" ");
+
 		}
 		return null;
 
 	}
 
 	private int getCadidate(Stack<Integer> mstSet, int[] vector) {
-		int cadidates = 0;
+		int cadidates = -1;
 		for (int i = 0; i < maxVertices; i++)
-			if (!mstSet.contains(vector[i]) && (cadidates == -1 || vector[cadidates] > vector[i]))
+			if (!mstSet.contains(i) && (cadidates == -1 || vector[cadidates] >= vector[i]))
 				cadidates = i;
 		if (cadidates == -1)
 			throw new RuntimeException("problem ");
@@ -115,9 +120,10 @@ public class WeightedGraph {
 
 	}
 
-	// If the weight w is 0, remove any edge between m and n (if any). 
-	// Otherwise, add an edge between vertices m and n with weight w. 
-	// If an edge already exists, replace the weight of the edge with the new weight. 
+	// If the weight w is 0, remove any edge between m and n (if any).
+	// Otherwise, add an edge between vertices m and n with weight w.
+	// If an edge already exists, replace the weight of the edge with the new
+	// weight.
 	// If the vertices do not exist or are equal, throw an exception.
 	public void insert(int m, int n, int w) {
 
@@ -128,7 +134,8 @@ public class WeightedGraph {
 
 	}
 
-	// Give your submission a name here so you can recognise the results when posted (keep it civil though please :))
+	// Give your submission a name here so you can recognise the results when posted
+	// (keep it civil though please :))
 	public String getName() {
 		return "my prims";
 	}
